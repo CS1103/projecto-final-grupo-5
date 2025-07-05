@@ -3,7 +3,7 @@
 
 #include <valarray>
 
-#include "nn_interfaces.h"
+#include "interfaces.h"
 
 namespace utec::neural_network {
 

@@ -1,0 +1,6 @@
+# ninja log v6
+6	530	7734572961555267	build.ninja	6107e9f0a8eced9b
+3	1032	7734572335038169	CMakeFiles/untitled3.dir/main.cpp.obj	35beb4171312d504
+10	2417	7734572335098679	CMakeFiles/untitled3.dir/tests/test_agent_env.cpp.obj	8f9b10e95b85f0b6
+4	486	7734572961555267	build.ninja	6107e9f0a8eced9b
+11	397	7734572963093280	untitled3.exe	d2a12484f9c75b74

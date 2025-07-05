@@ -1,12 +1,12 @@
 #ifndef NEURAL_NETWORK_H
 #define NEURAL_NETWORK_H
 
-#include "nn_interfaces.h"
-#include "nn_loss.h"
+#include "interfaces.h"
+#include "loss.h"
 #include <memory>
 #include <vector>
 #include <iostream>
-#include "nn_optimizer.h"
+#include "optimizer.h"
 
 namespace utec::neural_network {
 
