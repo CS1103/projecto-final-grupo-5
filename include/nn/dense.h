@@ -1,7 +1,7 @@
-#ifndef NN_DENSE_H
-#define NN_DENSE_H
+#ifndef DENSE_H
+#define DENSE_H
 
-#include "nn_interfaces.h"
+#include "interfaces.h"
 #include <functional>
 #include <type_traits>
 

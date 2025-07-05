@@ -1,7 +1,7 @@
 #ifndef NN_LOSS_H
 #define NN_LOSS_H
 
-#include "nn_interfaces.h"
+#include "interfaces.h"
 #include <cmath>
 
 namespace utec::neural_network {
