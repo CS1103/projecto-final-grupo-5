@@ -16,4 +16,5 @@ add_executable(untitled3
         #src/utec/agent/EnvGym.cpp
         #include/agent/PongAgent.h
         #include/agent/EnvGym.h
-        tests/test_agent_env.cpp)
+        tests/test_agent_env.cpp
+)

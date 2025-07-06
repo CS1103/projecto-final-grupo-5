@@ -3,7 +3,18 @@
 //
 #ifndef ENV_GYM_H
 #define ENV_GYM_H
-
+/**
+ * @class EnvGym
+ * @brief Entorno de simulación del juego Pong simplificado
+ *
+ * Características principales:
+ * - Estado: Posición de la bola (x,y) y posición de la paleta (y)
+ * - Acciones: -1 (mover abajo), 0 (no mover), +1 (mover arriba)
+ * - Física básica: Rebotes en paredes y paleta
+ * - Sistema de recompensas: +1 por golpear bola, -1 por fallar
+ *
+ * @note La simulación usa coordenadas normalizadas [0,1] en ambos ejes
+ */
 #include <algorithm> // Para std::min, std::max
 #include <random>
 
@@ -28,6 +39,9 @@ public:
     // Inicia o reinicia el juego a un estado inicial.
     State reset() {
         current_state_ = {0.5f, 0.5f, 0.5f};
+        // Cambiado: Velocidad X negativa (hacia izquierda) y mayor magnitud
+        ball_vx_ = -0.05f;
+        ball_vy_ = 0.02f;
         return current_state_;
     }
 
