@@ -29,10 +29,8 @@
   * Guevara Vargas Eduardo S. – 202410096 (Responsable de investigación teórica)
   * Cayllahua Hilario Joel M. - 202410731 (Desarrollo de la arquitectura)
   * Tamayo Hilario Maria K.   - 202410766 (Implementación del modelo)
-  * Alumno D – 209900004 (Pruebas y benchmarking)
-  * Alumno E – 209900005 (Documentación y demo)
-
-> *Nota: Reemplazar nombres y roles reales.*
+  * García López Bruno W.     - 202410719 (Pruebas y benchmarking)
+  * Rosales Bazán Sofia       - 202410535 (Documentación y demo)
 
 ---
 
@@ -230,8 +228,8 @@ Durante la simulación de 30 pasos usando el modelo denso 3x3 con pesos definido
 | Investigación teórica     | Guevara Vargas Eduardo S. | Documentar bases teóricas |
 | Diseño de la arquitectura | Cayllahua Hilario Joel M. | UML y esquemas de clases  |
 | Implementación del modelo | Tamayo Hilario Maria K.   | Código C++ de la NN       |
-| Pruebas y benchmarking    | Alumno D                  | Generación de métricas    |
-| Documentación y demo      | Alumno E                  | Tutorial y video demo     |
+| Pruebas y benchmarking    | García López Bruno W.     | Generación de métricas    |
+| Documentación y demo      | Rosales Bazán Sofia       | Tutorial y video demo     |
 
 > *Actualizar con tareas y nombres reales.*
 
