@@ -1,13 +1,22 @@
-//
-// Created by karol on 5/07/2025.
-//
 
 #ifndef PONG_AGENT_H
 #define PONG_AGENT_H
-
+/**
+ * @class PongAgent
+ * @brief Agente inteligente para jugar Pong usando un modelo neuronal
+ *
+ * Funcionamiento:
+ * 1. Recibe el estado del juego (ball_x, ball_y, paddle_y)
+ * 2. Convierte el estado a tensor de entrada (1x3)
+ * 3. Realiza predicción con el modelo neuronal
+ * 4. Selecciona acción con mayor valor Q
+ * 5. Maneja empates seleccionando acción neutral (0)
+ *
+ * @tparam T Tipo de datos para cálculos (float/double)
+ */
 #include "../nn/interfaces.h"
 #include "EnvGym.h"
-#include <algorithm> // Para std::max_element
+#include <algorithm>
 #include <memory>
 
 namespace utec::nn {
@@ -36,18 +45,28 @@ namespace utec::nn {
             utec::algebra::Tensor<T, 2> output = model_->forward(input);
 
             // 3. Encontrar la acción con el valor más alto.
-            // La salida es un tensor (1x3) con las puntuaciones para [abajo, quieto,
-            // arriba].
+            // La salida es un tensor (1x3) con las puntuaciones para [abajo, quieto, arriba].
             T max_val = output(0, 0);
             int max_idx = 0;
+            bool tie = false;  // Bandera para detectar empates
+
+            // Buscar el valor máximo y verificar empates
             for (size_t j = 1; j < output.shape()[1]; ++j) {
                 if (output(0, j) > max_val) {
                     max_val = output(0, j);
                     max_idx = j;
+                    tie = false;  // Nuevo máximo encontrado, reinicia bandera de empate
+                } else if (output(0, j) == max_val) {
+                    tie = true;   // Se encontró un empate
                 }
             }
 
             // 4. Mapear el índice de la acción al valor de acción requerido.
+            // Si hay empate, seleccionar la acción "quieto" (índice 1)
+            if (tie) {
+                return 0;  // Acción quieto
+            }
+
             // Índice 0 -> Acción -1 (bajar)
             // Índice 1 -> Acción  0 (quieto)
             // Índice 2 -> Acción +1 (subir)
