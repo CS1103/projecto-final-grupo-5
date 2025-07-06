@@ -22,8 +22,8 @@
 
 ### Datos generales
 
-* **Tema**: Redes Neuronales en AI
-* **Grupo**: `group_3_custom_name`
+* **Tema**: Desarrollar un agente de IA para jugar Pong usando C++
+* **Grupo**: `Grupo 5`
 * **Integrantes**:
 
   * Alumno A – 209900001 (Responsable de investigación teórica)
