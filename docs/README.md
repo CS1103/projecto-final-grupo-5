@@ -36,26 +36,42 @@
 
 ### Requisitos e instalación
 
-1. **Compilador**: GCC 11 o superior
-2. **Dependencias**:
+ **1. Requisitos del sistema**
 
-   * CMake 3.18+
-   * Eigen 3.4
-   * \[Otra librería opcional]
-3. **Instalación**:
+- Compilador compatible con **C++20** (ej. GCC 11+ o Clang 13+)
+- **CMake 3.18+** para gestionar la compilación
+- Sistema operativo: Linux, Windows o macOS
 
-   ```bash
-   git clone https://github.com/EJEMPLO/proyecto-final.git
-   cd proyecto-final
-   mkdir build && cd build
-   cmake ..
-   make
-   ```
+ **2. Dependencias**
 
-> *Ejemplo de repositorio y comandos, ajustar según proyecto.*
+Este proyecto es **auto-contenido**: no requiere librerías externas adicionales como TensorFlow.
+
+Sin embargo, organiza su código en carpetas modulares, por lo que requiere:
+
+- Soporte para `std::array`, `std::vector`, `std::unique_ptr`
+- Acceso al compilador desde consola (para compilar con CMake)
+- Una versión moderna de `g++` o `clang++` con soporte a **templates avanzados**
+
+> **Nota**: No se utilizan bibliotecas de álgebra externas; `Tensor<T, Rank>` está implementado desde cero.
+
+### **3. Clonar y compilar - Instalación**
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/CS1103/projecto-final-grupo-5.git
+cd projecto-final-grupo-5
+
+# Crea carpeta de build
+mkdir build && cd build
+
+# Genera los archivos de compilación
+cmake ..
+
+# Compila el proyecto
+make
+```
 
 ---
-
 ### 1. Investigación teórica
 
 * **Objetivo**: Explorar fundamentos y arquitecturas de redes neuronales.
