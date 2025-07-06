@@ -254,10 +254,13 @@ Durante la simulación de 30 pasos usando el modelo denso 3x3 con pesos definido
 ### 6. Conclusiones
 
 * **Logros**: Implementar NN desde cero, validar en dataset de ejemplo.
+*             Implementación de interfaces ILayer, activaciones, funciones de pérdida y optimización.
 * **Evaluación**: Calidad y rendimiento adecuados para propósito académico.
+*                 Simulación completa sin errores o comportamientos erráticos y golpe exitoso con diferencia de 0.0000 entre bola y paleta.
 * **Aprendizajes**: Profundización en backpropagation y optimización.
-* **Recomendaciones**: Escalar a datasets más grandes y optimizar memoria.
-
+*                   Dominio de templates C++20 y POO.
+* **Recomendaciones**: Escalar a datasets más grandes, optimizar memoria, añadir obstáculos, múltiples pelotas o física más realista y uso de algoritmos más avanzados.
+* **Impacto**: Framework extensible para futuros proyectos de machine learning.
 ---
 
 ### 7. Bibliografía
