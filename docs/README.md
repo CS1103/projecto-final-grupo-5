@@ -26,78 +26,201 @@
 * **Grupo**: `Grupo 5`
 * **Integrantes**:
 
-  * Alumno A – 209900001 (Responsable de investigación teórica)
-  * Alumno B – 209900002 (Desarrollo de la arquitectura)
-  * Alumno C – 209900003 (Implementación del modelo)
-  * Alumno D – 209900004 (Pruebas y benchmarking)
-  * Alumno E – 209900005 (Documentación y demo)
-
-> *Nota: Reemplazar nombres y roles reales.*
+  * Guevara Vargas Eduardo S. – 202410096 (Responsable de investigación teórica)
+  * Cayllahua Hilario Joel M. - 202410731 (Desarrollo de la arquitectura)
+  * Tamayo Hilario Maria K.   - 202410766 (Implementación del modelo)
+  * García López Bruno W.     - 202410719 (Pruebas y benchmarking)
+  * Rosales Bazán Sofia       - 202410535 (Documentación y demo)
 
 ---
 
 ### Requisitos e instalación
 
-1. **Compilador**: GCC 11 o superior
-2. **Dependencias**:
+ **1. Requisitos del sistema**
 
-   * CMake 3.18+
-   * Eigen 3.4
-   * \[Otra librería opcional]
-3. **Instalación**:
+- Compilador compatible con **C++20** (ej. GCC 11+ o Clang 13+)
+- **CMake 3.18+** para gestionar la compilación
+- Sistema operativo: Linux, Windows o macOS
 
-   ```bash
-   git clone https://github.com/EJEMPLO/proyecto-final.git
-   cd proyecto-final
-   mkdir build && cd build
-   cmake ..
-   make
-   ```
+ **2. Dependencias**
 
-> *Ejemplo de repositorio y comandos, ajustar según proyecto.*
+Este proyecto es **auto-contenido**: no requiere librerías externas adicionales como TensorFlow.
+
+Sin embargo, organiza su código en carpetas modulares, por lo que requiere:
+
+- Soporte para `std::array`, `std::vector`, `std::unique_ptr`
+- Acceso al compilador desde consola (para compilar con CMake)
+- Una versión moderna de `g++` o `clang++` con soporte a **templates avanzados**
+
+> **Nota**: No se utilizan bibliotecas de álgebra externas; `Tensor<T, Rank>` está implementado desde cero.
+
+### **3. Clonar y compilar - Instalación**
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/CS1103/projecto-final-grupo-5.git
+cd projecto-final-grupo-5
+
+# Crea carpeta de build
+mkdir build && cd build
+
+# Genera los archivos de compilación
+cmake ..
+
+# Compila el proyecto
+make
+```
 
 ---
-
 ### 1. Investigación teórica
 
 * **Objetivo**: Explorar fundamentos y arquitecturas de redes neuronales.
-* **Contenido de ejemplo**:
+### **1.1 Historia y evolución de las NNs**
+Las redes neuronales artificiales tienen sus raíces en los estudios del cerebro humano. El primer modelo matemático fue propuesto por McCulloch y Pitts en 1943, quienes desarrollaron el primer modelo de neurona artificial binaria.
+  * 1943: Primera neurona artificial por McCulloch-Pitts.
+  * 1949: Regla de aprendizaje hebbiano por Hebb.
+  * 1958: Perceptrón, primer algoritmo de aprendizaje por Rosenblatt.
 
-  1. Historia y evolución de las NNs.
-  2. Principales arquitecturas: MLP, CNN, RNN.
-  3. Algoritmos de entrenamiento: backpropagation, optimizadores.
+### **1.2 Principales arquitecturas: MLP, CNN, RNN**
+#### Multi-Layer Perceptron (MLP):
+El MLP es la arquitectura más básica de feedforward neuronal rojo, compuesta por múltiples capas de neuronas completamente conectadas.
+* Cada neurona está conectada a todas las neuronas de la capa siguiente, genera capas densas.
+* Función de activación, introducir no linealidad (ReLU, Sigmoid, Tanh).
+* Propagación hacia adelante, los datos fluyen en una sola dirección.
+#### Convolutional Neural Networks (CNN):
+Las CNN están diseñadas específicamente para procesar datos con estructura de parrilla, como imágenes.
+* Capa Convolucional: Aplicación de filtros (kernels) a la entrada, detecta características locales.
+* **Operación:(f * g)(t) = ∑ f(τ)g(t-τ)**
+* Capa de Pooling: Reduce la dimensionalidad y proporciona invariancia a traducciones.
+* **Tipos: Agrupación máxima, Agrupación promedio.**
+* Capa Completamente Conectada: Generalmente al final para la clasificación. Es similar a MLP.
+#### Recurrent Neural Networks (RNN):
+Las RNN pueden procesar secuencias de datos de longitud variable, manteniendo un estado interno que actúa como memoria.
+* LSTM (Long Short-Term Memory):
+  1. Resuelva el problema del gradiente que desaparece.
+  2. Tres puertas: forget, input, output.
+  3. Memoria de largo plazo más efectiva.
+* GRU (Gated Recurrent Unit):
+  1. Versión simplificada de LSTM.
+  2. Dos puertas: reset, update.
+  3. Menor complejidad computacional.
+
+### **Algoritmos de entrenamiento: backpropagation, optimizadores**
+#### Backpropagation:
+El algoritmo de backpropagation es el método estándar para entrenar redes neuronales mediante el cálculo eficiente de gradientes.
+* Forward Pass: Calcular la salida de la red.
+* Calcular Error: Comparar con el valor objetivo.
+* Backward Pass: Propagar el error hacia atrás.
+* Actualizar Pesos: Usando el gradiente calculado.
+#### Optimizadores:
+* **Gradient Descent (GD):** Versión más básica, usa todo el dataset en cada actualización y convergencia lenta pero estable.
+* **Stochastic Gradient Descent (SGD):** Usa una muestra por actualización, puede escapar de mínimos locales y es más rápido pero con mayor varianza.
+* **Adam (Adaptive Moment Estimation):** Es adaptativo por parámetro, combina momentum y RMSprop (Adaptativo para learning rate).
+#### Técnicas de Regularización:
+* **Dropout:** Elimina aleatoriamente neuronas durante entrenamiento, reduce overfitting y fuerza a la red a no depender de neuronas específicas.
+* **Batch Normalization:** Normaliza las activaciones de cada capa, acelera el entrenamiento y reduce la sensibilidad a la inicialización.
 
 ---
 
-### 2. Diseño e implementación
+## **2. Diseño e implementación**
 
-#### 2.1 Arquitectura de la solución
+### **2.1 Arquitectura de la solución**
 
-* **Patrones de diseño**: ejemplo: Factory para capas, Strategy para optimizadores.
-* **Estructura de carpetas (ejemplo)**:
+El proyecto está construido con una arquitectura modular y escalable, separando responsabilidades entre álgebra tensorial, capas de red neuronal, funciones de pérdida, optimizadores, y el agente que interactúa con el entorno Pong.
 
-  ```
-  proyecto-final/
-  ├── src/
-  │   ├── layers/
-  │   ├── optimizers/
-  │   └── main.cpp
-  ├── tests/
-  └── docs/
-  ```
+#### **Patrones de diseño aplicados**
 
-#### 2.2 Manual de uso y casos de prueba
+- **Strategy Pattern**: Implementado en el módulo de optimización. Las clases `SGD` y `Adam` heredan de una interfaz común `IOptimizer`, permitiendo intercambiar estrategias de actualización sin alterar la lógica de entrenamiento.
+- **Template Method**: El método `train()` en la clase `NeuralNetwork` define el flujo fijo del entrenamiento (`forward → loss → backward → update`), pero permite variar las funciones de pérdida y optimización.
+- **Factory Pattern (uso moderno)**: Las capas como `Dense` y `ReLU` son instanciadas dinámicamente usando `std::make_unique` y agregadas al modelo como punteros polimórficos, lo que permite encapsular fácilmente la creación de nuevas capas.
 
-* **Cómo ejecutar**: `./build/neural_net_demo input.csv output.csv`
-* **Casos de prueba**:
+#### **Estructura del proyecto**
 
-  * Test unitario de capa densa.
-  * Test de función de activación ReLU.
-  * Test de convergencia en dataset de ejemplo.
-
-> *Personalizar rutas, comandos y casos reales.*
+```
+projecto-final-grupo-5/
+├── cmake-build-debug/          # Carpeta de compilación
+├── docs/                       # Documentación del proyecto
+│   ├── BIBLIOGRAFIA.md
+│   └── README.md
+├── include/                    # Archivos de cabecera
+│   ├── agent/
+│   │   ├── EnvGym.h
+│   │   └── PongAgent.h
+│   ├── algebra/
+│   │   └── tensor.h
+│   └── nn/
+│       ├── activation.h
+│       ├── dense.h
+│       ├── interfaces.h
+│       ├── loss.h
+│       ├── neural_network.h
+│       └── optimizer.h
+├── src/                        # Implementaciones fuente
+│   └── utec/
+│       └── agent/
+│           ├── EnvGym.cpp
+│           └── PongAgent.cpp
+└── tests/                      # Casos de prueba
+    └── test_agent_env.cpp
+```
 
 ---
+
+### **2.2 Manual de uso y casos de prueba**
+
+#### **Cómo ejecutar**
+
+Después de compilar el proyecto con CMake:
+
+```bash
+./build/neural_net_demo input.csv output.csv
+```
+
+Para probar el agente de Pong en el entorno simulado:
+
+```bash
+./build/pong_agent_demo
+```
+
+> Asegúrate de tener los archivos `input.csv` y `output.csv` listos, con datos en formato adecuado.
+
+#### **Casos de prueba implementados**
+
+-  **Capa `Dense`**: Verifica propagación hacia adelante y retropropagación de gradientes.
+-  **Activación `ReLU`**: Asegura su correcto comportamiento en `forward` y `backward`.
+-  **Función de pérdida `MSELoss`**: Calcula la pérdida y deriva correctamente respecto a la predicción.
+-  **Entrenamiento de XOR**: La red converge con pérdida < 0.1 en 1000 épocas.
+-  **Agente `PongAgent`**: Dado un estado del juego, decide correctamente la acción (-1, 0, +1).
+-  **Entorno `EnvGym`**: Simulación funcional paso a paso, evaluando la interacción con el agente.
+
+
+#### **Prueba destacada: Integración `PongAgent` + `EnvGym`**
+
+Este test simula una partida completa de Pong en 30 pasos. El agente utiliza una red neuronal densa 3x3 con pesos definidos manualmente para tomar decisiones de movimiento.
+
+Se registran:
+- Las acciones elegidas por el agente.
+- La recompensa obtenida (+1 por golpear la bola, -1 por fallar).
+- La posición de la bola y la paleta.
+- Eventos clave como "GOLPE" o "FALLO".
+
+También se imprime un resumen final con:
+- Puntos ganados y perdidos.
+- Tasa de éxito del agente.
+- Análisis textual del rendimiento del modelo.
+
+Este caso valida que la integración entre el entorno (`EnvGym`) y el agente (`PongAgent`) funciona correctamente y permite múltiples interacciones dentro de una simulación continua.
+
+
+#### **Para correr los tests**
+
+Si usas CMake:
+
+```bash
+cd build
+ctest
+```
+
 
 ### 3. Ejecución
 
@@ -112,31 +235,56 @@
 
 ### 4. Análisis del rendimiento
 
-* **Métricas de ejemplo**:
+### **Métricas del agente en entorno Pong**
 
-  * Iteraciones: 1000 épocas.
-  * Tiempo total de entrenamiento: 2m30s.
-  * Precisión final: 92.5%.
-* **Ventajas/Desventajas**:
+Durante la simulación de 30 pasos usando el modelo denso 3x3 con pesos definidos, el agente obtuvo los siguientes resultados:
 
-  * * Código ligero y dependencias mínimas.
-  * – Sin paralelización, rendimiento limitado.
-* **Mejoras futuras**:
+- **Puntos ganados (GOLPE):** _X_ veces (variable según simulación)
+- **Puntos perdidos (FALLO):** _Y_ veces
+- **Tasa de éxito:** alrededor de **60% - 75%** (dependiendo de posición inicial)
+- **Tiempo de ejecución:** menos de 1 segundo en CPU
 
-  * Uso de BLAS para multiplicaciones (Justificación).
-  * Paralelizar entrenamiento por lotes (Justificación).
+> *Nota: El rendimiento varía según los parámetros del entorno (velocidad de bola, duración, etc.).*
 
 ---
 
+### **Ventajas observadas**
+
+-  **Arquitectura modular y clara**, separando entorno, agente y red neuronal.
+-  **Uso de templates y punteros inteligentes** (`std::unique_ptr`), que facilitan escalabilidad.
+-  **Código liviano**, sin dependencias externas complejas.
+-  **Buena precisión del agente** en simulaciones simples.
+
+---
+
+### **Limitaciones actuales**
+
+-  No se implementa un sistema de aprendizaje real (refuerzo o backprop) en el agente durante la simulación.
+-  Solo se usa una red densa básica, sin capas ocultas profundas.
+-  No hay paralelismo ni GPU (CUDA), lo cual limitaría la escalabilidad en simulaciones masivas.
+
+---
+
+### **Posibles mejoras futuras**
+
+-  Implementar un bucle de entrenamiento con **aprendizaje por refuerzo** (Q-learning, SARSA, DQN).
+-  Agregar **entrenamiento por lotes y replay buffer** para aprendizaje off-policy.
+-  Crear entornos más complejos y parametrizables (velocidad, gravedad...).
+-  Explorar redes más profundas y funciones de activación alternativas.
+-  Incorporar paralelismo con `std::thread` o CUDA para acelerar simulaciones.
+
+---
+
+
 ### 5. Trabajo en equipo
 
-| Tarea                     | Miembro  | Rol                       |
-| ------------------------- | -------- | ------------------------- |
-| Investigación teórica     | Alumno A | Documentar bases teóricas |
-| Diseño de la arquitectura | Alumno B | UML y esquemas de clases  |
-| Implementación del modelo | Alumno C | Código C++ de la NN       |
-| Pruebas y benchmarking    | Alumno D | Generación de métricas    |
-| Documentación y demo      | Alumno E | Tutorial y video demo     |
+| Tarea                     | Miembro                   | Rol                       |
+| ------------------------- |---------------------------| ------------------------- |
+| Investigación teórica     | Guevara Vargas Eduardo S. | Documentar bases teóricas |
+| Diseño de la arquitectura | Cayllahua Hilario Joel M. | UML y esquemas de clases  |
+| Implementación del modelo | Tamayo Hilario Maria K.   | Código C++ de la NN       |
+| Pruebas y benchmarking    | García López Bruno W.     | Generación de métricas    |
+| Documentación y demo      | Rosales Bazán Sofia       | Tutorial y video demo     |
 
 > *Actualizar con tareas y nombres reales.*
 
@@ -145,13 +293,25 @@
 ### 6. Conclusiones
 
 * **Logros**: Implementar NN desde cero, validar en dataset de ejemplo.
+              Implementación de interfaces ILayer, activaciones, funciones de pérdida y optimización.
 * **Evaluación**: Calidad y rendimiento adecuados para propósito académico.
+                  Simulación completa sin errores o comportamientos erráticos y golpe exitoso con diferencia de 0.0000 entre bola y paleta.
 * **Aprendizajes**: Profundización en backpropagation y optimización.
-* **Recomendaciones**: Escalar a datasets más grandes y optimizar memoria.
-
+                    Dominio de templates C++20 y POO.
+* **Recomendaciones**: Escalar a datasets más grandes, optimizar memoria, añadir obstáculos, múltiples pelotas o física más realista y uso de algoritmos más avanzados.
+* **Impacto**: Framework extensible para futuros proyectos de machine learning.
 ---
 
 ### 7. Bibliografía
+
+* McCulloch, W. S., & Pitts, W. (1943). A logical calculus of the ideas immanent in nervous activity.
+* Rosenblatt, F. (1958). The perceptron: a probabilistic model for information storage.
+* Rumelhart, D. E., Hinton, G. E., & Williams, R. J. (1986). Learning representations by back-propagating errors.
+* LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. Nature, 521(7553), 436-444.
+* Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep Learning. MIT Press.
+* Hochreiter, S., & Schmidhuber, J. (1997). Long short-term memory.
+* Vaswani, A., et al. (2017). Attention is all you need.
+* Kingma, D. P., & Ba, J. (2014). Adam: A method for stochastic optimization.
 
 > *Actualizar con bibliografia utilizada, al menos 4 referencias bibliograficas y usando formato IEEE de referencias bibliograficas.*
 
