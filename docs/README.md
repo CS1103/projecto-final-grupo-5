@@ -105,7 +105,7 @@ Las RNN pueden procesar secuencias de datos de longitud variable, manteniendo un
   2. Dos puertas: reset, update.
   3. Menor complejidad computacional.
 
-### **Algoritmos de entrenamiento: backpropagation, optimizadores**
+### **1.3 Algoritmos de entrenamiento: backpropagation, optimizadores**
 #### Backpropagation:
 El algoritmo de backpropagation es el método estándar para entrenar redes neuronales mediante el cálculo eficiente de gradientes.
 * Forward Pass: Calcular la salida de la red.
