@@ -34,7 +34,6 @@ public:
 
 
 /// @brief Optimizador Adam (Adaptive Moment Estimation).
-///
 /// Combina ventajas de AdaGrad y RMSProp. Utiliza promedios móviles de primer y segundo orden
 /// para adaptar la tasa de aprendizaje por parámetro.
 template <typename T>
