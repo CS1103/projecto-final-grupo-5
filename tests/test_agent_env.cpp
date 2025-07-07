@@ -58,7 +58,7 @@ int main() {
     EnvGym env;
     float reward;
     bool done;
-    int max_steps = 30;
+    int max_steps = 100;
     int points = 0;
     int misses = 0;
 
