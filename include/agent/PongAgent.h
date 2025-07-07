@@ -1,19 +1,14 @@
-
 #ifndef PONG_AGENT_H
 #define PONG_AGENT_H
+
 /**
- * @class PongAgent
- * @brief Agente inteligente para jugar Pong usando un modelo neuronal
+ * @file PongAgent.h
+ * @brief Define el agente que toma decisiones en el entorno Pong usando un modelo neuronal.
  *
- * Funcionamiento:
- * 1. Recibe el estado del juego (ball_x, ball_y, paddle_y)
- * 2. Convierte el estado a tensor de entrada (1x3)
- * 3. Realiza predicción con el modelo neuronal
- * 4. Selecciona acción con mayor valor Q
- * 5. Maneja empates seleccionando acción neutral (0)
- *
- * @tparam T Tipo de datos para cálculos (float/double)
+ * El agente convierte el estado del juego en un tensor de entrada, ejecuta un forward pass
+ * y toma la acción correspondiente al valor máximo predicho (con estrategia de desempate).
  */
+
 #include "../nn/interfaces.h"
 #include "EnvGym.h"
 #include <algorithm>
@@ -21,58 +16,67 @@
 
 namespace utec::nn {
 
-    template <typename T>
-    class PongAgent {
-    private:
-        // El modelo es una capa o una red neuronal completa.
-        std::unique_ptr<utec::neural_network::ILayer<T>> model_;
+/// @brief Agente inteligente para jugar Pong usando una red neuronal o capa densa.
+///
+/// ### Funcionamiento:
+/// 1. Recibe el estado del entorno (`State` con posición de bola y paleta)
+/// 2. Convierte ese estado en un tensor de entrada (1x3)
+/// 3. Ejecuta una predicción `forward()`
+/// 4. Elige la acción con mayor valor Q:
+///    - Índice 0 → acción -1 (bajar)
+///    - Índice 1 → acción  0 (quieto)
+///    - Índice 2 → acción +1 (subir)
+/// 5. Si hay empate en las predicciones, elige siempre la acción neutral (quieto).
+///
+/// @tparam T Tipo de datos usados (float, double)
+template <typename T>
+class PongAgent {
+private:
+    std::unique_ptr<utec::neural_network::ILayer<T>> model_; ///< Modelo neuronal usado por el agente
 
-    public:
-        // El constructor toma posesión del modelo entrenado.
-        PongAgent(std::unique_ptr<utec::neural_network::ILayer<T>> m)
-            : model_(std::move(m)) {}
+public:
+    /// @brief Constructor que recibe un modelo neuronal entrenado
+    /// @param m Puntero único al modelo (puede ser una capa o red)
+    PongAgent(std::unique_ptr<utec::neural_network::ILayer<T>> m)
+        : model_(std::move(m)) {}
 
-        // Convierte el estado del juego en una acción (-1, 0, o 1).
-        int act(const State& s) {
-            // 1. Convertir el estado (struct) a un Tensor de entrada (1x3).
-            // Usamos el Tensor de tu proyecto.
-            utec::algebra::Tensor<T, 2> input(1, 3);
-            input(0, 0) = s.ball_x;
-            input(0, 1) = s.ball_y;
-            input(0, 2) = s.paddle_y;
+    /// @brief Toma una acción en base al estado actual del entorno.
+    ///
+    /// @param s Estado actual del juego (posición de bola y paleta)
+    /// @return Acción seleccionada: -1 (bajar), 0 (quieto), +1 (subir)
+    int act(const State& s) {
+        // 1. Convertir el estado en tensor de entrada (1x3)
+        utec::algebra::Tensor<T, 2> input(1, 3);
+        input(0, 0) = s.ball_x;
+        input(0, 1) = s.ball_y;
+        input(0, 2) = s.paddle_y;
 
-            // 2. Obtener la predicción de la red (propagación hacia adelante).
-            utec::algebra::Tensor<T, 2> output = model_->forward(input);
+        // 2. Ejecutar predicción con el modelo
+        utec::algebra::Tensor<T, 2> output = model_->forward(input);
 
-            // 3. Encontrar la acción con el valor más alto.
-            // La salida es un tensor (1x3) con las puntuaciones para [abajo, quieto, arriba].
-            T max_val = output(0, 0);
-            int max_idx = 0;
-            bool tie = false;  // Bandera para detectar empates
+        // 3. Determinar el índice con el mayor valor
+        T max_val = output(0, 0);
+        int max_idx = 0;
+        bool tie = false;
 
-            // Buscar el valor máximo y verificar empates
-            for (size_t j = 1; j < output.shape()[1]; ++j) {
-                if (output(0, j) > max_val) {
-                    max_val = output(0, j);
-                    max_idx = j;
-                    tie = false;  // Nuevo máximo encontrado, reinicia bandera de empate
-                } else if (output(0, j) == max_val) {
-                    tie = true;   // Se encontró un empate
-                }
+        for (size_t j = 1; j < output.shape()[1]; ++j) {
+            if (output(0, j) > max_val) {
+                max_val = output(0, j);
+                max_idx = j;
+                tie = false;
+            } else if (output(0, j) == max_val) {
+                tie = true;
             }
-
-            // 4. Mapear el índice de la acción al valor de acción requerido.
-            // Si hay empate, seleccionar la acción "quieto" (índice 1)
-            if (tie) {
-                return 0;  // Acción quieto
-            }
-
-            // Índice 0 -> Acción -1 (bajar)
-            // Índice 1 -> Acción  0 (quieto)
-            // Índice 2 -> Acción +1 (subir)
-            return max_idx - 1;
         }
-    };
+
+        // 4. Si hay empate, retornar acción neutral
+        if (tie)
+            return 0;
+
+        // Mapear índice a acción: 0 → -1, 1 → 0, 2 → +1
+        return max_idx - 1;
+    }
+};
 
 } // namespace utec::nn
 
