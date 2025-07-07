@@ -75,6 +75,15 @@ make
 ### 1. Investigación teórica
 
 * **Objetivo**: Explorar fundamentos y arquitecturas de redes neuronales.
+### **1.1 Historia y evolución de las NNs**
+Las redes neuronales artificiales tienen sus raíces en los estudios del cerebro humano. El primer modelo matemático fue propuesto por McCulloch y Pitts en 1943, quienes desarrollaron el primer modelo de neurona artificial binaria.
+  * Evolución 
+  1943: Primera neurona artificial por McCulloch-Pitts. 
+  1949: Regla de aprendizaje hebbiano por Hebb.
+  1958: Perceptrón, primer algoritmo de aprendizaje por Rosenblatt.
+
+### **1.2 Principales arquitecturas: MLP, CNN, RNN**
+
 * **Contenido de ejemplo**:
 
   1. Historia y evolución de las NNs.
