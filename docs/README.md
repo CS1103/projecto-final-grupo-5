@@ -26,11 +26,11 @@
 * **Grupo**: `Grupo 5`
 * **Integrantes**:
 
-  * Guevara Vargas Eduardo S. – 202410096 (Responsable de investigación teórica)
-  * Cayllahua Hilario Joel M. - 202410731 (Desarrollo de la arquitectura)
-  * Tamayo Hilario Maria K.   - 202410766 (Implementación del modelo)
-  * García López Bruno W.     - 202410719 (Pruebas y benchmarking)
-  * Rosales Bazán Sofia       - 202410535 (Documentación y demo)
+  * Guevara Vargas Eduardo S. – 202410096 (Responsable de investigación teórica y documentación técnica)
+  * Cayllahua Hilario Joel M. - 202410731 (Desarrollo de la arquitectura y estructura base del código)
+  * Tamayo Hilario Maria K.   - 202410766 (Implementación del modelo neuronal)
+  * García López Bruno W.     - 202410719 (Pruebas, benchmarking y ejecución del demo)
+  * Rosales Bazán Sofia       - 202410535 (Documentación, asistencia en la demo y estructura del proyecto)
 
 ---
 
@@ -278,15 +278,16 @@ Durante la simulación de 30 pasos usando el modelo denso 3x3 con pesos definido
 
 ### 5. Trabajo en equipo
 
-| Tarea                     | Miembro                   | Rol                       |
-| ------------------------- |---------------------------| ------------------------- |
-| Investigación teórica     | Guevara Vargas Eduardo S. | Documentar bases teóricas |
-| Diseño de la arquitectura | Cayllahua Hilario Joel M. | UML y esquemas de clases  |
-| Implementación del modelo | Tamayo Hilario Maria K.   | Código C++ de la NN       |
-| Pruebas y benchmarking    | García López Bruno W.     | Generación de métricas    |
-| Documentación y demo      | Rosales Bazán Sofia       | Tutorial y video demo     |
+> Todos los miembros colaboraron activamente en el desarrollo y revisión del código.  
+> Los roles mostrados reflejan las principales responsabilidades asumidas por cada integrante.
 
-> *Actualizar con tareas y nombres reales.*
+| Tarea                     | Miembro                   | Rol principal                        |
+|---------------------------|---------------------------|--------------------------------------|
+| Investigación teórica     | Guevara Vargas Eduardo S. | Bases teóricas, README, documentación técnica |
+| Diseño de la arquitectura | Cayllahua Hilario Joel M. | Estructura de capas y clases base    |
+| Implementación del modelo | Tamayo Hilario Maria K.   | Capas, funciones de activación, forward/backward |
+| Pruebas y ejecución final | García López Bruno W.     | Validación de comportamiento y demo final |
+| Documentación y soporte   | Rosales Bazán Sofia       | Comentarios in-code, apoyo a presentación |
 
 ---
 
