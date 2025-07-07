@@ -4,27 +4,22 @@
 #include "interfaces.h"
 #include <functional>
 #include <type_traits>
-/// @file dense.h
-/// @brief Implementación de una capa densa (fully connected) para redes neuronales
+#include <fstream>
+#include <string>
+
 namespace utec::neural_network {
-/// Capa densa (fully connected).
-/// Realiza la operación: output = input * W + b
-/// Guarda el input para su uso en backpropagation.
+
 template <typename T>
 class Dense final : public ILayer<T> {
 private:
-    Tensor<T, 2> W_, dW_;  ///< Pesos y su gradiente
-    Tensor<T, 1> b_, db_;  ///< Bias y su gradiente
-    Tensor<T, 2> last_x_;  ///< Cache del input para usar en backward
+    Tensor<T, 2> W_, dW_;
+    Tensor<T, 1> b_, db_;
+    Tensor<T, 2> last_x_;
 
 public:
     using Initializer = std::function<void(Tensor<T, 2>&)>;
     using InitializerBias = std::function<void(Tensor<T, 1>&)>;
-    /// Constructor principal de la capa densa
-    /// @param in_f Número de entradas
-    /// @param out_f Número de salidas
-    /// @param init_w_fun Función para inicializar los pesos
-    /// @param init_b_fun Función para inicializar los bias
+
     template <typename InitW, typename InitB>
     Dense(size_t in_f, size_t out_f, InitW&& init_w_fun, InitB&& init_b_fun) {
         W_ = Tensor<T, 2>(in_f, out_f);
@@ -41,8 +36,7 @@ public:
             b_(j) = b_view(0, j);
         }
     }
-    /// Constructor alternativo que usa una sola función de inicialización
-    /// para pesos y bias
+
     template <typename Init,
               typename = std::enable_if_t<
                   std::is_invocable_r_v<void, Init, Tensor<T, 2>&>
@@ -57,9 +51,7 @@ public:
                         tensor[j] = temp(0, j);
                     }
                 }) {}
-    /// Propagación hacia adelante (forward pass)
-    /// @param x Tensor de entrada
-    /// @return Salida de la capa (x * W + b)
+
     Tensor<T, 2> forward(const Tensor<T, 2>& x) override {
         last_x_ = x;
         Tensor<T, 2> output(x.shape()[0], W_.shape()[1]);
@@ -74,10 +66,7 @@ public:
         }
         return output;
     }
-    /// Retropropagación del error (backward pass)
-    /// Calcula los gradientes y devuelve el gradiente respecto a la entrada
-    /// @param dZ Gradiente recibido desde la capa superior
-    /// @return Gradiente respecto a la entrada (para capa anterior)
+
     Tensor<T, 2> backward(const Tensor<T, 2>& dZ) override {
         dW_.fill(0);
         for (size_t i = 0; i < last_x_.shape()[0]; ++i) {
@@ -107,7 +96,7 @@ public:
         }
         return dX;
     }
-    /// Actualiza los parámetros W y b usando el optimizador proporcionado
+
     void update_params(IOptimizer<T>& optimizer) override {
         optimizer.update(W_, dW_);
 
@@ -124,8 +113,59 @@ public:
             b_(j) = b2d(0, j);
         }
     }
+
+    // Guarda los pesos y bias en un archivo de texto
+    void save_weights(const std::string& filename) const {
+        std::ofstream file(filename);
+        if (!file.is_open()) return;
+        // Guardar dimensiones
+        file << W_.shape()[0] << ' ' << W_.shape()[1] << '\n';
+        // Guardar pesos
+        for (size_t i = 0; i < W_.shape()[0]; ++i)
+            for (size_t j = 0; j < W_.shape()[1]; ++j)
+                file << W_(i, j) << ' ';
+        file << '\n';
+        // Guardar bias
+        for (size_t j = 0; j < b_.size(); ++j)
+            file << b_(j) << ' ';
+        file << '\n';
+        file.close();
+    }
+
+    // Carga los pesos y bias desde un archivo de texto
+    void load_weights(const std::string& filename) {
+        std::ifstream file(filename);
+        if (!file.is_open()) {
+            throw std::runtime_error("No se pudo abrir el archivo de pesos: " + filename);
+        }
+        std::string dummy_line;
+        // Ignorar la primera línea (dimensiones)
+        std::getline(file, dummy_line);
+        // Leer pesos W_
+        for (size_t i = 0; i < W_.shape()[0]; ++i) {
+            for (size_t j = 0; j < W_.shape()[1]; ++j) {
+                if (!(file >> W_(i, j))) {
+                    throw std::runtime_error("Error leyendo pesos W en " + filename);
+                }
+                // Mensaje de depuración
+                // std::cout << "W_(" << i << "," << j << ") = " << W_(i, j) << std::endl;
+            }
+        }
+        // Leer sesgos b_
+        for (size_t j = 0; j < b_.size(); ++j) {
+            if (!(file >> b_(j))) {
+                throw std::runtime_error("Error leyendo sesgos b en " + filename);
+            }
+            // Mensaje de depuración
+            // std::cout << "b_(" << j << ") = " << b_(j) << std::endl;
+        }
+    }
+
+    const Tensor<T, 2>& weights() const {
+        return W_;
+    }
 };
 
 } // namespace utec::neural_network
+#endif // DENSE_H
 
-#endif // NN_DENSE_H
