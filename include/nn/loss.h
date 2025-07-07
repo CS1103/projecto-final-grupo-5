@@ -6,16 +6,22 @@
 
 namespace utec::neural_network {
 
+/// @brief Función de pérdida de error cuadrático medio (MSE).
+/// Se utiliza comúnmente para tareas de regresión. Calcula la media del cuadrado
+/// de las diferencias entre las predicciones y los valores verdaderos.
 template <typename T>
 class MSELoss : public ILoss<T, 2> {
 private:
-    algebra::Tensor<T, 2> y_pred_;
-    algebra::Tensor<T, 2> y_true_;
-    
+    algebra::Tensor<T, 2> y_pred_;  ///< Predicciones del modelo
+    algebra::Tensor<T, 2> y_true_;  ///< Valores verdaderos
+
 public:
+    /// @brief Constructor que recibe las predicciones y etiquetas verdaderas
     MSELoss(const algebra::Tensor<T,2>& y_prediction, const algebra::Tensor<T,2>& y_true)
         : y_pred_(y_prediction), y_true_(y_true) {}
 
+    /// @brief Calcula el valor de la pérdida MSE
+    /// @return Escalar con el error cuadrático medio
     T loss() const override {
         T total_loss = 0;
         size_t elements = y_pred_.shape()[0] * y_pred_.shape()[1];
@@ -28,6 +34,8 @@ public:
         return total_loss / elements;
     }
 
+    /// @brief Calcula el gradiente de la pérdida MSE con respecto a la predicción
+    /// @return Tensor con el gradiente
     algebra::Tensor<T,2> loss_gradient() const override {
         algebra::Tensor<T,2> grad(y_pred_.shape()[0], y_pred_.shape()[1]);
         size_t elements = y_pred_.shape()[0] * y_pred_.shape()[1];
@@ -40,17 +48,25 @@ public:
     }
 };
 
+
+/// @brief Función de pérdida binaria de entropía cruzada (Binary Cross Entropy).
+///
+/// Utilizada para clasificación binaria. Evalúa la diferencia entre las probabilidades
+/// predichas y las verdaderas etiquetas binarias.
 template <typename T>
 class BCELoss : public ILoss<T, 2> {
 private:
-    algebra::Tensor<T, 2> y_pred_;
-    algebra::Tensor<T, 2> y_true_;
-    T epsilon = 1e-12;
-    
+    algebra::Tensor<T, 2> y_pred_;  ///< Predicciones del modelo
+    algebra::Tensor<T, 2> y_true_;  ///< Etiquetas verdaderas
+    T epsilon = 1e-12;              ///< Término de seguridad para evitar log(0)
+
 public:
+    /// @brief Constructor que recibe las predicciones y etiquetas verdaderas
     BCELoss(const algebra::Tensor<T,2>& y_prediction, const algebra::Tensor<T,2>& y_true)
         : y_pred_(y_prediction), y_true_(y_true) {}
 
+    /// @brief Calcula el valor de la pérdida BCE
+    /// @return Escalar con la pérdida binaria
     T loss() const override {
         T total_loss = 0;
         size_t elements = y_pred_.shape()[0] * y_pred_.shape()[1];
@@ -64,6 +80,8 @@ public:
         return total_loss / elements;
     }
 
+    /// @brief Calcula el gradiente de la pérdida BCE con respecto a la predicción
+    /// @return Tensor con el gradiente
     algebra::Tensor<T,2> loss_gradient() const override {
         algebra::Tensor<T,2> grad(y_pred_.shape()[0], y_pred_.shape()[1]);
         size_t elements = y_pred_.shape()[0] * y_pred_.shape()[1];
