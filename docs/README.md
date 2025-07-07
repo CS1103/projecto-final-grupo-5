@@ -276,7 +276,7 @@ Durante la simulación de 30 pasos usando el modelo denso 3x3 con pesos definido
 ---
 
 
-### 5. Trabajo en equipo
+### 5. Trabajo en equipo y asignación de tareas
 
 > Todos los miembros colaboraron activamente en el desarrollo y revisión del código.  
 > Los roles mostrados reflejan las principales responsabilidades asumidas por cada integrante.
@@ -314,7 +314,7 @@ Durante la simulación de 30 pasos usando el modelo denso 3x3 con pesos definido
 * Vaswani, A., et al. (2017). Attention is all you need.
 * Kingma, D. P., & Ba, J. (2014). Adam: A method for stochastic optimization.
 
-> *Actualizar con bibliografia utilizada, al menos 4 referencias bibliograficas y usando formato IEEE de referencias bibliograficas.*
+
 
 ---
 
