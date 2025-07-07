@@ -3,84 +3,95 @@
 //
 #ifndef ENV_GYM_H
 #define ENV_GYM_H
+
 /**
- * @class EnvGym
- * @brief Entorno de simulación del juego Pong simplificado
+ * @file EnvGym.h
+ * @brief Define un entorno de simulación simplificado del juego Pong para pruebas de IA.
  *
- * Características principales:
- * - Estado: Posición de la bola (x,y) y posición de la paleta (y)
- * - Acciones: -1 (mover abajo), 0 (no mover), +1 (mover arriba)
- * - Física básica: Rebotes en paredes y paleta
- * - Sistema de recompensas: +1 por golpear bola, -1 por fallar
+ * Este entorno permite probar agentes que toman decisiones con acciones discretas:
+ * -1 (mover abajo), 0 (no mover), +1 (mover arriba).
  *
- * @note La simulación usa coordenadas normalizadas [0,1] en ambos ejes
+ * Se utiliza en conjunto con modelos de redes neuronales y agentes como PongAgent.
  */
-#include <algorithm> // Para std::min, std::max
+
+#include <algorithm>  // Para std::min, std::max
 #include <random>
 
 namespace utec::nn {
 
-// Define el estado del juego.
+/// @brief Representa el estado actual del juego Pong.
+/// Incluye la posición de la bola (x, y) y la posición de la paleta controlada por el agente.
 struct State {
-    float ball_x, ball_y;
-    float paddle_y;
+    float ball_x;    ///< Posición X de la bola [0,1]
+    float ball_y;    ///< Posición Y de la bola [0,1]
+    float paddle_y;  ///< Posición Y del centro de la paleta [0,1]
 };
 
-// Entorno mínimo de simulación.
+/// @brief Entorno mínimo de simulación para el juego Pong.
+///
+/// Características principales:
+/// - Movimiento simple de bola y paleta.
+/// - Colisiones con paredes y paleta.
+/// - Recompensas: +1 por golpear, -1 por fallar.
+/// - Coordenadas normalizadas entre 0 y 1.
 class EnvGym {
 private:
-    State current_state_;
-    float ball_vx_ = 0.03f;
-    float ball_vy_ = 0.01f;
-    const float PADDLE_SPEED = 0.04f;
-    const float PADDLE_HEIGHT = 0.2f;
+    State current_state_;   ///< Estado actual del juego
+    float ball_vx_ = 0.03f; ///< Velocidad X de la bola
+    float ball_vy_ = 0.01f; ///< Velocidad Y de la bola
+    const float PADDLE_SPEED = 0.04f;   ///< Velocidad de movimiento de la paleta
+    const float PADDLE_HEIGHT = 0.2f;   ///< Altura total de la paleta
 
 public:
-    // Inicia o reinicia el juego a un estado inicial.
+    /// @brief Reinicia el entorno a un estado inicial predeterminado.
+    ///
+    /// Bola en el centro, paleta centrada, velocidad hacia la izquierda.
+    /// @return Estado inicial del entorno
     State reset() {
         current_state_ = {0.5f, 0.5f, 0.5f};
-        // Cambiado: Velocidad X negativa (hacia izquierda) y mayor magnitud
-        ball_vx_ = -0.05f;
-        ball_vy_ = 0.02f;
+        ball_vx_ = -0.05f;  // Hacia la izquierda
+        ball_vy_ = 0.02f;   // Diagonal
         return current_state_;
     }
 
-    // Avanza un paso en la simulación.
+    /// @brief Avanza un paso en la simulación en base a la acción del agente.
+    ///
+    /// @param action Acción del agente: -1 (abajo), 0 (sin mover), 1 (arriba)
+    /// @param reward Valor de recompensa (referencia de salida)
+    /// @param done Indica si el juego terminó (referencia de salida)
+    /// @return Nuevo estado del entorno luego de aplicar acción y física
     State step(int action, float& reward, bool& done) {
         done = false;
         reward = 0.0f;
 
-        // 1. Mover la paleta según la acción.
+        // 1. Mover paleta
         current_state_.paddle_y += action * PADDLE_SPEED;
-        // Mantener la paleta dentro de los límites [0, 1]
         current_state_.paddle_y =
             std::max(0.0f, std::min(1.0f, current_state_.paddle_y));
 
-        // 2. Mover la bola.
+        // 2. Mover bola
         current_state_.ball_x += ball_vx_;
         current_state_.ball_y += ball_vy_;
 
-        // 3. Manejar colisiones con las paredes superior e inferior.
+        // 3. Rebote con techo y piso
         if (current_state_.ball_y < 0.0f || current_state_.ball_y > 1.0f) {
             ball_vy_ = -ball_vy_;
         }
 
-        // 4. Manejar colisión con la pared derecha (el oponente imaginario).
+        // 4. Rebote con pared derecha (oponente)
         if (current_state_.ball_x > 1.0f) {
             ball_vx_ = -ball_vx_;
         }
 
-        // 5. Manejar colisión con la paleta del agente o fin del juego.
+        // 5. Chequear colisión con la paleta (izquierda)
         if (current_state_.ball_x < 0.0f) {
-            // ¿La bola golpeó la paleta?
             if (current_state_.ball_y > current_state_.paddle_y - PADDLE_HEIGHT / 2 &&
                 current_state_.ball_y < current_state_.paddle_y + PADDLE_HEIGHT / 2) {
-                ball_vx_ = -ball_vx_;
-                reward = 1.0f; // Recompensa positiva por golpear la bola.
+                ball_vx_ = -ball_vx_;  // Rebote
+                reward = 1.0f;         // Golpe exitoso
             } else {
-                // La bola se fue, el juego termina.
-                done = true;
-                reward = -1.0f; // Recompensa negativa por fallar.
+                done = true;           // Fin del juego
+                reward = -1.0f;        // Fallo
             }
         }
 
