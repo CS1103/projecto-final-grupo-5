@@ -89,12 +89,12 @@ El MLP es la arquitectura más básica de feedforward neuronal rojo, compuesta p
 * Propagación hacia adelante, los datos fluyen en una sola dirección.
 #### Convolutional Neural Networks (CNN):
 Las CNN están diseñadas específicamente para procesar datos con estructura de parrilla, como imágenes.
-* Capa Convolucional: Aplicación de filtros (kernels) a la entrada, detecta características locales. Operación:(f * g)(t) = ∑ f(τ)g(t-τ)
-* Capa de Pooling:
+* Capa Convolucional: Aplicación de filtros (kernels) a la entrada, detecta características locales.
+** Operación:(f * g)(t) = ∑ f(τ)g(t-τ)
+* Capa de Pooling: Reduce la dimensionalidad y proporciona invariancia a traducciones.
+** Tipos: Agrupación máxima, Agrupación promedio
+* Capa Completamente Conectada: Generalmente al final para la clasificación. Es similar a MLP.
 
-Reducir la dimensionalidad
-Tipos: Agrupación máxima, Agrupación promedio
-Proporciona invariancia a traducciones.
 
 * **Contenido de ejemplo**:
 
