@@ -90,11 +90,20 @@ El MLP es la arquitectura más básica de feedforward neuronal rojo, compuesta p
 #### Convolutional Neural Networks (CNN):
 Las CNN están diseñadas específicamente para procesar datos con estructura de parrilla, como imágenes.
 * Capa Convolucional: Aplicación de filtros (kernels) a la entrada, detecta características locales.
-** Operación:(f * g)(t) = ∑ f(τ)g(t-τ)
+  1. Operación:(f * g)(t) = ∑ f(τ)g(t-τ)
 * Capa de Pooling: Reduce la dimensionalidad y proporciona invariancia a traducciones.
-** Tipos: Agrupación máxima, Agrupación promedio
+  1. Tipos: Agrupación máxima, Agrupación promedio
 * Capa Completamente Conectada: Generalmente al final para la clasificación. Es similar a MLP.
-
+#### Recurrent Neural Networks (RNN):
+Las RNN pueden procesar secuencias de datos de longitud variable, manteniendo un estado interno que actúa como memoria.
+* LSTM (Long Short-Term Memory):
+  1. Resuelva el problema del gradiente que desaparece
+  2. Tres puertas: olvido, entrada, salida
+  3. Memoria de largo plazo más efectiva
+* GRU (Gated Recurrent Unit):
+  1. Versión simplificada de LSTM
+  2. Dos puertas: reset, update
+  3. Menor complejidad computacional
 
 * **Contenido de ejemplo**:
 
