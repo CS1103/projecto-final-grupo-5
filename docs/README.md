@@ -116,6 +116,9 @@ El algoritmo de backpropagation es el método estándar para entrenar redes neur
 * **Gradient Descent (GD):** Versión más básica, usa todo el dataset en cada actualización y convergencia lenta pero estable.
 * **Stochastic Gradient Descent (SGD):** Usa una muestra por actualización, puede escapar de mínimos locales y es más rápido pero con mayor varianza.
 * **Adam (Adaptive Moment Estimation):** Es adaptativo por parámetro, combina momentum y RMSprop (Adaptativo para learning rate).
+#### Técnicas de Regularización:
+* **Dropout:** Elimina aleatoriamente neuronas durante entrenamiento, reduce overfitting y fuerza a la red a no depender de neuronas específicas.
+* **Batch Normalization:** Normaliza las activaciones de cada capa, acelera el entrenamiento y reduce la sensibilidad a la inicialización.
 
 ---
 
@@ -301,14 +304,14 @@ Durante la simulación de 30 pasos usando el modelo denso 3x3 con pesos definido
 
 ### 7. Bibliografía
 
-1. McCulloch, W. S., & Pitts, W. (1943). A logical calculus of the ideas immanent in nervous activity.
-2. Rosenblatt, F. (1958). The perceptron: a probabilistic model for information storage.
-3. Rumelhart, D. E., Hinton, G. E., & Williams, R. J. (1986). Learning representations by back-propagating errors.
-4. LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. Nature, 521(7553), 436-444.
-5. Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep Learning. MIT Press.
-6. Hochreiter, S., & Schmidhuber, J. (1997). Long short-term memory.
-7. Vaswani, A., et al. (2017). Attention is all you need.
-8. Kingma, D. P., & Ba, J. (2014). Adam: A method for stochastic optimization.
+* McCulloch, W. S., & Pitts, W. (1943). A logical calculus of the ideas immanent in nervous activity.
+* Rosenblatt, F. (1958). The perceptron: a probabilistic model for information storage.
+* Rumelhart, D. E., Hinton, G. E., & Williams, R. J. (1986). Learning representations by back-propagating errors.
+* LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. Nature, 521(7553), 436-444.
+* Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep Learning. MIT Press.
+* Hochreiter, S., & Schmidhuber, J. (1997). Long short-term memory.
+* Vaswani, A., et al. (2017). Attention is all you need.
+* Kingma, D. P., & Ba, J. (2014). Adam: A method for stochastic optimization.
 
 > *Actualizar con bibliografia utilizada, al menos 4 referencias bibliograficas y usando formato IEEE de referencias bibliograficas.*
 
