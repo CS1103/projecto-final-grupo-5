@@ -77,12 +77,24 @@ make
 * **Objetivo**: Explorar fundamentos y arquitecturas de redes neuronales.
 ### **1.1 Historia y evolución de las NNs**
 Las redes neuronales artificiales tienen sus raíces en los estudios del cerebro humano. El primer modelo matemático fue propuesto por McCulloch y Pitts en 1943, quienes desarrollaron el primer modelo de neurona artificial binaria.
-  * Evolución 
-  1943: Primera neurona artificial por McCulloch-Pitts. 
-  1949: Regla de aprendizaje hebbiano por Hebb.
-  1958: Perceptrón, primer algoritmo de aprendizaje por Rosenblatt.
+  * 1943: Primera neurona artificial por McCulloch-Pitts.
+  * 1949: Regla de aprendizaje hebbiano por Hebb.
+  * 1958: Perceptrón, primer algoritmo de aprendizaje por Rosenblatt.
 
 ### **1.2 Principales arquitecturas: MLP, CNN, RNN**
+#### Multi-Layer Perceptron (MLP):
+El MLP es la arquitectura más básica de feedforward neuronal rojo, compuesta por múltiples capas de neuronas completamente conectadas.
+* Cada neurona está conectada a todas las neuronas de la capa siguiente, genera capas densas.
+* Función de activación, introducir no linealidad (ReLU, Sigmoid, Tanh)
+* Propagación hacia adelante, los datos fluyen en una sola dirección.
+#### Convolutional Neural Networks (CNN):
+Las CNN están diseñadas específicamente para procesar datos con estructura de parrilla, como imágenes.
+* Capa Convolucional: Aplicación de filtros (kernels) a la entrada, detecta características locales. Operación:(f * g)(t) = ∑ f(τ)g(t-τ)
+* Capa de Pooling:
+
+Reducir la dimensionalidad
+Tipos: Agrupación máxima, Agrupación promedio
+Proporciona invariancia a traducciones.
 
 * **Contenido de ejemplo**:
 
