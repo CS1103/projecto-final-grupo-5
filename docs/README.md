@@ -85,31 +85,37 @@ Las redes neuronales artificiales tienen sus raíces en los estudios del cerebro
 #### Multi-Layer Perceptron (MLP):
 El MLP es la arquitectura más básica de feedforward neuronal rojo, compuesta por múltiples capas de neuronas completamente conectadas.
 * Cada neurona está conectada a todas las neuronas de la capa siguiente, genera capas densas.
-* Función de activación, introducir no linealidad (ReLU, Sigmoid, Tanh)
+* Función de activación, introducir no linealidad (ReLU, Sigmoid, Tanh).
 * Propagación hacia adelante, los datos fluyen en una sola dirección.
 #### Convolutional Neural Networks (CNN):
 Las CNN están diseñadas específicamente para procesar datos con estructura de parrilla, como imágenes.
 * Capa Convolucional: Aplicación de filtros (kernels) a la entrada, detecta características locales.
-  1. Operación:(f * g)(t) = ∑ f(τ)g(t-τ)
+* **Operación:(f * g)(t) = ∑ f(τ)g(t-τ)**
 * Capa de Pooling: Reduce la dimensionalidad y proporciona invariancia a traducciones.
-  1. Tipos: Agrupación máxima, Agrupación promedio
+* **Tipos: Agrupación máxima, Agrupación promedio.**
 * Capa Completamente Conectada: Generalmente al final para la clasificación. Es similar a MLP.
 #### Recurrent Neural Networks (RNN):
 Las RNN pueden procesar secuencias de datos de longitud variable, manteniendo un estado interno que actúa como memoria.
 * LSTM (Long Short-Term Memory):
-  1. Resuelva el problema del gradiente que desaparece
-  2. Tres puertas: olvido, entrada, salida
-  3. Memoria de largo plazo más efectiva
+  1. Resuelva el problema del gradiente que desaparece.
+  2. Tres puertas: forget, input, output.
+  3. Memoria de largo plazo más efectiva.
 * GRU (Gated Recurrent Unit):
-  1. Versión simplificada de LSTM
-  2. Dos puertas: reset, update
-  3. Menor complejidad computacional
+  1. Versión simplificada de LSTM.
+  2. Dos puertas: reset, update.
+  3. Menor complejidad computacional.
 
-* **Contenido de ejemplo**:
-
-  1. Historia y evolución de las NNs.
-  2. Principales arquitecturas: MLP, CNN, RNN.
-  3. Algoritmos de entrenamiento: backpropagation, optimizadores.
+### **Algoritmos de entrenamiento: backpropagation, optimizadores**
+#### Backpropagation:
+El algoritmo de backpropagation es el método estándar para entrenar redes neuronales mediante el cálculo eficiente de gradientes.
+* Forward Pass: Calcular la salida de la red.
+* Calcular Error: Comparar con el valor objetivo.
+* Backward Pass: Propagar el error hacia atrás.
+* Actualizar Pesos: Usando el gradiente calculado.
+#### Optimizadores:
+* **Gradient Descent (GD):** Versión más básica, usa todo el dataset en cada actualización y convergencia lenta pero estable.
+* **Stochastic Gradient Descent (SGD):** Usa una muestra por actualización, puede escapar de mínimos locales y es más rápido pero con mayor varianza.
+* **Adam (Adaptive Moment Estimation):** Es adaptativo por parámetro, combina momentum y RMSprop (Adaptativo para learning rate).
 
 ---
 
@@ -294,6 +300,15 @@ Durante la simulación de 30 pasos usando el modelo denso 3x3 con pesos definido
 ---
 
 ### 7. Bibliografía
+
+1. McCulloch, W. S., & Pitts, W. (1943). A logical calculus of the ideas immanent in nervous activity.
+2. Rosenblatt, F. (1958). The perceptron: a probabilistic model for information storage.
+3. Rumelhart, D. E., Hinton, G. E., & Williams, R. J. (1986). Learning representations by back-propagating errors.
+4. LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. Nature, 521(7553), 436-444.
+5. Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep Learning. MIT Press.
+6. Hochreiter, S., & Schmidhuber, J. (1997). Long short-term memory.
+7. Vaswani, A., et al. (2017). Attention is all you need.
+8. Kingma, D. P., & Ba, J. (2014). Adam: A method for stochastic optimization.
 
 > *Actualizar con bibliografia utilizada, al menos 4 referencias bibliograficas y usando formato IEEE de referencias bibliograficas.*
 
