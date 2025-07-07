@@ -83,7 +83,7 @@ public:
         }
     }
 
-    /// @brief Método adicional opcional para optimizadores con estado (no usado aquí)
+    /// @brief Metodo adicional opcional para optimizadores con estado (no usado aquí)
     void step() override {}
 };
 
