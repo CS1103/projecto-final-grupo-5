@@ -17,9 +17,4 @@ add_executable(untitled3
         #include/agent/PongAgent.h
         #include/agent/EnvGym.h
         tests/test_agent_env.cpp
-        src/utec/agent/EnvGym.cpp
-        src/utec/agent/PonAgent.cpp
-        src/utec/concurrent_queue.h
-        src/utec/thread_pool.h
-        include/nn/parallel_inference.h
 )

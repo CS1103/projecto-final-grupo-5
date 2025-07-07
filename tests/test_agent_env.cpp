@@ -53,13 +53,12 @@ void print_state(int step, int action, float reward, const State& s, const std::
 }
 
 int main() {
-    srand(time(0));  // Semilla para aleatoriedad
-
+    // Configuracion inicial
     auto agent = PongAgent<float>(create_test_model());
     EnvGym env;
     float reward;
     bool done;
-    int max_steps = 100;
+    int max_steps = 30;
     int points = 0;
     int misses = 0;
 
