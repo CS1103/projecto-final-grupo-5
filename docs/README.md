@@ -283,11 +283,11 @@ Durante la simulación de 30 pasos usando el modelo denso 3x3 con pesos definido
 
 | Tarea                     | Miembro                   | Rol principal                        |
 |---------------------------|---------------------------|--------------------------------------|
-| Investigación teórica     | Guevara Vargas Eduardo S. | Bases teóricas, README, documentación técnica |
+| Investigación teórica     | Guevara Vargas Eduardo S. | Comentarios in-code, README, documentación técnica |
 | Diseño de la arquitectura | Cayllahua Hilario Joel M. | Estructura de capas y clases base    |
 | Implementación del modelo | Tamayo Hilario Maria K.   | Capas, funciones de activación, forward/backward |
 | Pruebas y ejecución final | García López Bruno W.     | Validación de comportamiento y demo final |
-| Documentación y soporte   | Rosales Bazán Sofia       | Comentarios in-code, apoyo a presentación |
+| Documentación y soporte   | Rosales Bazán Diana S.    | Bases teóricas, documentación, apoyo a presentación |
 
 ---
 
