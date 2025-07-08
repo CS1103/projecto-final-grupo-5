@@ -30,7 +30,7 @@
   * Cayllahua Hilario Joel M. - 202410731 (Desarrollo de la arquitectura y estructura base del código)
   * Tamayo Hilario Maria K.   - 202410766 (Implementación del modelo neuronal)
   * García López Bruno W.     - 202410719 (Pruebas, benchmarking y ejecución del demo)
-  * Rosales Bazán Sofia       - 202410535 (Documentación, asistencia en la demo y estructura del proyecto)
+  * Rosales Bazán Diana S.    - 202410535 (Documentación, asistencia en la demo y estructura del proyecto)
 
 ---
 
