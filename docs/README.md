@@ -137,8 +137,13 @@ El proyecto está construido con una arquitectura modular y escalable, separando
 #### **Estructura del proyecto**
 
 ```
-projecto-final-grupo-5/
+proyecto-final-grupo-5/
 ├── cmake-build-debug/          # Carpeta de compilación
+├── Data/
+│   ├── pong_train.csv            # Datos para entrenamiento automático
+│   ├── pong_train_manual.csv     # Datos generados manualmente
+│   ├── pong_model_dense1.weights # Pesos de la capa densa 1
+│   └── pong_model_dense2.weights # Pesos de la capa densa 2
 ├── docs/                       # Documentación del proyecto
 │   ├── BIBLIOGRAFIA.md
 │   └── README.md
@@ -157,11 +162,13 @@ projecto-final-grupo-5/
 │       └── optimizer.h
 ├── src/                        # Implementaciones fuente
 │   └── utec/
-│       └── agent/
-│           ├── EnvGym.cpp
-│           └── PongAgent.cpp
+│       ├── agent/
+│       │   ├── EnvGym.cpp
+│       │   └── PongAgent.cpp
+│       └── DataGenerator.cpp   # Generador de datos sintéticos para entrenamiento
 └── tests/                      # Casos de prueba
-    └── test_agent_env.cpp
+│  └── test_agent_env.cpp
+└── main.cpp                 # Menú interactivo principal 
 ```
 
 ---
@@ -170,55 +177,101 @@ projecto-final-grupo-5/
 
 #### **Cómo ejecutar**
 
-Después de compilar el proyecto con CMake:
+Luego de compilar el proyecto con CMake, se puede ejecutar el menú principal del simulador de Pong desde consola:
 
 ```bash
-./build/neural_net_demo input.csv output.csv
+./build/main
 ```
 
-Para probar el agente de Pong en el entorno simulado:
+
+Este menú permite realizar las siguientes acciones:
+
+| Opción | Acción |
+|--------|--------|
+| 1 | Entrenar y cargar un modelo IA desde `Data/pong_train.csv`. |
+| 2 | Ejecutar una simulación automática donde el agente juega por sí solo. |
+| 3 | Jugar manualmente con teclado (`W`, `S`, `D`) y guardar los datos en `pong_train_manual.csv`. |
+| 4 | Entrenar la IA usando los datos generados manualmente. |
+| 5 | Guardar los pesos del modelo entrenado. |
+| 6 | Cargar un modelo previamente guardado desde archivos `.weights`. |
+| 7 | Salir del programa. |
+
+> Antes de ejecutar simulaciones automáticas (opción 2), es necesario haber entrenado o cargado un modelo (opciones 1, 4 o 6).
+
+---
+
+### Ejecución alternativa: Generador de datos sintéticos
+
+Para generar un conjunto base de entrenamiento desde código (sin juego real):
 
 ```bash
-./build/pong_agent_demo
+./build/DataGenerator
 ```
 
-> Asegúrate de tener los archivos `input.csv` y `output.csv` listos, con datos en formato adecuado.
+Esto crea un archivo `Data/pong_train.csv` con datos sintéticos para entrenamiento supervisado.
 
-#### **Casos de prueba implementados**
+---
 
--  **Capa `Dense`**: Verifica propagación hacia adelante y retropropagación de gradientes.
--  **Activación `ReLU`**: Asegura su correcto comportamiento en `forward` y `backward`.
--  **Función de pérdida `MSELoss`**: Calcula la pérdida y deriva correctamente respecto a la predicción.
--  **Entrenamiento de XOR**: La red converge con pérdida < 0.1 en 1000 épocas.
--  **Agente `PongAgent`**: Dado un estado del juego, decide correctamente la acción (-1, 0, +1).
--  **Entorno `EnvGym`**: Simulación funcional paso a paso, evaluando la interacción con el agente.
+### Controles del juego manual
 
+Durante la ejecución de la opción 3, el usuario puede controlar la paleta usando el teclado:
 
-#### **Prueba destacada: Integración `PongAgent` + `EnvGym`**
+- `W` → Subir paleta
+- `S` → Bajar paleta
+- `D` → Mantener posición
+- `Q` → Salir del modo manual
 
-Este test simula una partida completa de Pong en 30 pasos. El agente utiliza una red neuronal densa 3x3 con pesos definidos manualmente para tomar decisiones de movimiento.
+Cada acción es registrada en `Data/pong_train_manual.csv` junto con el estado y recompensa, útil para personalizar el estilo de juego del agente.
 
-Se registran:
-- Las acciones elegidas por el agente.
-- La recompensa obtenida (+1 por golpear la bola, -1 por fallar).
+---
+
+### Casos de prueba implementados
+
+Los archivos dentro del directorio `tests/` contienen validaciones unitarias de los componentes fundamentales del sistema:
+
+- **Dense Layer**: Validación de `forward()` y `backward()`, incluyendo gradientes y pesos.
+- **ReLU Activation**: Comprobación del comportamiento esperado ante entradas positivas y negativas.
+- **MSELoss**: Confirmación del cálculo correcto de la pérdida y sus derivadas.
+- **Red XOR**: Entrenamiento de una red simple para aprender la compuerta lógica XOR. Se considera éxito si la pérdida cae por debajo de 0.1 en menos de 1000 épocas.
+- **PongAgent**: Verificación de la función `act()` dada una entrada, asegurando que retorna valores dentro del rango {-1, 0, 1}.
+- **EnvGym**: Comprobación de la simulación del entorno, asegurando que responde coherentemente a las acciones del agente.
+
+---
+
+### Test destacado: integración entre agente y entorno
+
+Un caso clave de prueba consiste en simular una partida completa de Pong en 30 pasos, utilizando un modelo con pesos definidos manualmente.
+
+Se monitorean:
+
+- Las acciones ejecutadas por el agente.
 - La posición de la bola y la paleta.
-- Eventos clave como "GOLPE" o "FALLO".
+- Las recompensas obtenidas por cada interacción.
+- Los reinicios automáticos tras fallar.
 
-También se imprime un resumen final con:
-- Puntos ganados y perdidos.
-- Tasa de éxito del agente.
-- Análisis textual del rendimiento del modelo.
+Además, se imprime un resumen final con métricas como:
 
-Este caso valida que la integración entre el entorno (`EnvGym`) y el agente (`PongAgent`) funciona correctamente y permite múltiples interacciones dentro de una simulación continua.
+- Puntos totales obtenidos.
+- Frecuencia de éxito (contacto con la bola).
+- Evaluación general del comportamiento de la IA.
 
+Este test permite validar que la interacción entre `PongAgent` y `EnvGym` se mantiene coherente a lo largo de múltiples ciclos de simulación.
 
-#### **Para correr los tests**
+---
 
-Si usas CMake:
+### Cómo correr los tests
+
+Usando CMake y CTest, los casos pueden ejecutarse desde la carpeta `build`:
 
 ```bash
 cd build
 ctest
+```
+
+O también ejecutando directamente el binario de pruebas si existe:
+
+```bash
+./tests/test_agent_env
 ```
 
 
@@ -239,8 +292,8 @@ ctest
 
 Durante la simulación de 30 pasos usando el modelo denso 3x3 con pesos definidos, el agente obtuvo los siguientes resultados:
 
-- **Puntos ganados (GOLPE):** _X_ veces (variable según simulación)
-- **Puntos perdidos (FALLO):** _Y_ veces
+- **Puntos ganados (GOLPE):** variable según simulación
+- **Puntos perdidos (FALLO):** variable según simulación
 - **Tasa de éxito:** alrededor de **60% - 75%** (dependiendo de posición inicial)
 - **Tiempo de ejecución:** menos de 1 segundo en CPU
 
@@ -250,28 +303,31 @@ Durante la simulación de 30 pasos usando el modelo denso 3x3 con pesos definido
 
 ### **Ventajas observadas**
 
--  **Arquitectura modular y clara**, separando entorno, agente y red neuronal.
--  **Uso de templates y punteros inteligentes** (`std::unique_ptr`), que facilitan escalabilidad.
--  **Código liviano**, sin dependencias externas complejas.
--  **Buena precisión del agente** en simulaciones simples.
+- **Arquitectura modular y clara**, separando entorno, agente y red neuronal.
+- **Uso de templates y punteros inteligentes** (`std::unique_ptr`), que facilitan escalabilidad.
+- **Código liviano**, sin dependencias externas complejas.
+- **Buena precisión del agente** en simulaciones simples.
+- **Sistema de pruebas robusto**, validando individualmente y en conjunto cada módulo.
 
 ---
 
 ### **Limitaciones actuales**
 
--  No se implementa un sistema de aprendizaje real (refuerzo o backprop) en el agente durante la simulación.
--  Solo se usa una red densa básica, sin capas ocultas profundas.
--  No hay paralelismo ni GPU (CUDA), lo cual limitaría la escalabilidad en simulaciones masivas.
+- No se implementa un sistema de aprendizaje real (refuerzo o backprop) en el agente durante la simulación.
+- Solo se usa una red densa básica, sin capas ocultas profundas.
+- No hay paralelismo ni GPU (CUDA), lo cual limitaría la escalabilidad en simulaciones masivas.
+- El entrenamiento depende de datos externos generados o simulados, no del entorno en tiempo real.
 
 ---
 
 ### **Posibles mejoras futuras**
 
--  Implementar un bucle de entrenamiento con **aprendizaje por refuerzo** (Q-learning, SARSA, DQN).
--  Agregar **entrenamiento por lotes y replay buffer** para aprendizaje off-policy.
--  Crear entornos más complejos y parametrizables (velocidad, gravedad...).
--  Explorar redes más profundas y funciones de activación alternativas.
--  Incorporar paralelismo con `std::thread` o CUDA para acelerar simulaciones.
+- Implementar un bucle de entrenamiento con **aprendizaje por refuerzo** (Q-learning, SARSA, DQN).
+- Agregar **entrenamiento por lotes y replay buffer** para aprendizaje off-policy.
+- Crear entornos más complejos y parametrizables (velocidad, gravedad...).
+- Explorar redes más profundas y funciones de activación alternativas.
+- Incorporar paralelismo con `std::thread` o CUDA para acelerar simulaciones.
+- Diseñar una interfaz gráfica para visualización de episodios y métricas.
 
 ---
 
