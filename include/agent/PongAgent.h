@@ -8,6 +8,7 @@
 #include "../nn/optimizer.h"
 #include "../nn/activation.h"
 #include "EnvGym.h"
+
 #include <algorithm>
 #include <memory>
 #include <fstream>
@@ -18,15 +19,19 @@
 
 namespace utec::nn {
 
+/// @brief Representa un ejemplo de entrenamiento para Pong.
 struct PongSample {
     float ball_x, ball_y, ball_vx, ball_vy, paddle_y;
-    int action;
-    float reward;
+    int action;     ///< Acción tomada en ese estado (-1, 0, 1)
+    float reward;   ///< Recompensa obtenida por esa acción
 };
 
+/// @brief Agente basado en red neuronal para el entorno Pong.
+/// Se entrena a partir de datos y puede actuar según el estado del entorno.
 template <typename T>
 class PongAgent {
 public:
+    /// @brief Modelo secuencial simple: Dense -> ReLU -> Dense
     struct Sequential : utec::neural_network::ILayer<T> {
         std::unique_ptr<utec::neural_network::Dense<T>> l1;
         std::unique_ptr<utec::neural_network::ReLU<T>> act;
@@ -37,14 +42,17 @@ public:
                    std::unique_ptr<utec::neural_network::Dense<T>> c)
             : l1(std::move(a)), act(std::move(b)), l2(std::move(c)) {}
 
+        /// @brief Propagación hacia adelante.
         utec::algebra::Tensor<T, 2> forward(const utec::algebra::Tensor<T, 2>& x) override {
             return l2->forward(act->forward(l1->forward(x)));
         }
 
+        /// @brief Retropropagación del gradiente.
         utec::algebra::Tensor<T, 2> backward(const utec::algebra::Tensor<T, 2>& grad) override {
             return l1->backward(act->backward(l2->backward(grad)));
         }
 
+        /// @brief Actualiza los parámetros del modelo con un optimizador.
         void update_params(utec::neural_network::IOptimizer<T>& opt) override {
             l1->update_params(opt);
             l2->update_params(opt);
@@ -54,28 +62,35 @@ public:
 private:
     std::unique_ptr<utec::neural_network::ILayer<T>> model_;
 
+    /// @brief Inicializador aleatorio de pesos.
     static void initialize_weights(utec::algebra::Tensor<T, 2>& t) {
         for (size_t i = 0; i < t.shape()[0]; ++i)
             for (size_t j = 0; j < t.shape()[1]; ++j)
                 t(i, j) = static_cast<T>((rand() / (T)RAND_MAX - 0.5) * 0.2);
     }
 
+    /// @brief Inicializa con ceros (para bias).
     static void initialize_zeros(utec::algebra::Tensor<T, 2>& t) {
         t.fill(0);
     }
 
 public:
+    /// @brief Constructor que recibe un modelo entrenado.
     explicit PongAgent(std::unique_ptr<utec::neural_network::ILayer<T>> m)
         : model_(std::move(m)) {}
 
+    /// @brief Decide una acción dada un estado.
+    /// Si `epsilon` > 0, permite exploración aleatoria (exploración epsilon-greedy).
     int act(const State& s, float epsilon = 0.1f) {
         if ((float)rand() / RAND_MAX < epsilon) {
             return (rand() % 3) - 1;
         }
+
         utec::algebra::Tensor<T, 2> input(1, 3);
         input(0, 0) = s.ball_x;
         input(0, 1) = s.ball_y;
         input(0, 2) = s.paddle_y;
+
         utec::algebra::Tensor<T, 2> output = model_->forward(input);
 
         T max_val = output(0, 0);
@@ -90,19 +105,26 @@ public:
                 tie = true;
             }
         }
+
         return tie ? 0 : max_idx - 1;
     }
 
+    /// @brief Obtiene el modelo completo (puntero).
     utec::neural_network::ILayer<T>* get_model() { return model_.get(); }
+
+    /// @brief Accede a la primera capa densa si existe.
     utec::neural_network::Dense<T>* get_dense1() {
         auto* seq = dynamic_cast<Sequential*>(model_.get());
         return seq ? seq->l1.get() : nullptr;
     }
+
+    /// @brief Accede a la segunda capa densa si existe.
     utec::neural_network::Dense<T>* get_dense2() {
         auto* seq = dynamic_cast<Sequential*>(model_.get());
         return seq ? seq->l2.get() : nullptr;
     }
 
+    /// @brief Carga datos de entrenamiento desde un archivo CSV.
     static std::vector<PongSample> load_training_data(const std::string& filename) {
         std::vector<PongSample> data;
         std::ifstream file(filename);
@@ -110,8 +132,10 @@ public:
             std::cerr << "No se pudo abrir el archivo: " << filename << std::endl;
             return data;
         }
+
         std::string line;
-        std::getline(file, line); // skip header
+        std::getline(file, line); // Saltar encabezado
+
         while (std::getline(file, line)) {
             if (line.empty()) continue;
             std::stringstream ss(line);
@@ -131,6 +155,11 @@ public:
         return data;
     }
 
+    /// @brief Entrena un modelo secuencial a partir de un CSV.
+    /// @param csv_path Ruta del archivo CSV
+    /// @param epochs Número de épocas de entrenamiento
+    /// @param lr Tasa de aprendizaje
+    /// @return Modelo entrenado
     static std::unique_ptr<utec::neural_network::ILayer<T>> train_from_csv(
         const std::string& csv_path, int epochs = 100, T lr = 0.01) {
 
@@ -157,19 +186,23 @@ public:
                 target(0, 2) = (sample.action == 1) ? 1 : 0;
 
                 auto output = model->forward(input);
-                auto grad = utec::algebra::Tensor<T, 2>(1, 3);
+
+                utec::algebra::Tensor<T, 2> grad(1, 3);
                 T loss = 0;
                 for (int i = 0; i < 3; ++i) {
                     grad(0, i) = 2 * (output(0, i) - target(0, i));
                     loss += (output(0, i) - target(0, i)) * (output(0, i) - target(0, i));
                 }
                 total_loss += loss / 3.0;
+
                 model->backward(grad);
                 model->update_params(optimizer);
             }
+
             if (epoch % 10 == 0) {
                 auto* seq = dynamic_cast<Sequential*>(model.get());
                 std::cout << "Epoch " << epoch << ", Loss: " << total_loss / data.size() << "\n";
+
                 if (seq && seq->l1) {
                     std::cout << "Primeros pesos de la capa 1: ";
                     for (int i = 0; i < 3; ++i)
@@ -178,9 +211,11 @@ public:
                 }
             }
         }
+
         return model;
     }
 
+    /// @brief Crea una red secuencial cargando pesos desde archivos.
     static std::unique_ptr<utec::neural_network::ILayer<T>> create_sequential_with_weights(
         const std::string& weights1, const std::string& weights2) {
 
