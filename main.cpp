@@ -245,7 +245,8 @@ int main() {
         switch (opcion) {
             case 1: {
                 std::cout << "Entrenando el modelo desde CSV IA...\n";
-                auto modelo = PongAgent<float>::train_from_csv("Data/pong_train.csv", 2000, 0.001f);
+                auto modelo = PongAgent<float>::train_from_csv("../Data/pong_train.csv",
+                                                    2000, 0.001f);
                 agente = std::make_unique<PongAgent<float>>(std::move(modelo));
                 modelo_cargado = true;
                 std::cout << "Entrenamiento completado y modelo cargado.\n";
@@ -267,7 +268,8 @@ int main() {
             }
             case 4: {
                 std::cout << "Entrenando el modelo con datos manuales...\n";
-                auto modelo = PongAgent<float>::train_from_csv("Data/pong_train_manual.csv", 2000, 0.001f);
+                auto modelo = PongAgent<float>::train_from_csv("../Data/pong_train_manual.csv",
+                                                    2000, 0.001f);
                 agente = std::make_unique<PongAgent<float>>(std::move(modelo));
                 modelo_cargado = true;
                 std::cout << "Entrenamiento con datos manuales completado.\n";
@@ -281,8 +283,8 @@ int main() {
                     auto* dense1 = agente->get_dense1();
                     auto* dense2 = agente->get_dense2();
                     if (dense1 && dense2) {
-                        dense1->save_weights("Data/pong_model_dense1.weights");
-                        dense2->save_weights("Data/pong_model_dense2.weights");
+                        dense1->save_weights("../Data/pong_model_dense1.weights");
+                        dense2->save_weights("../Data/pong_model_dense2.weights");
                         std::cout << "Modelo guardado.\n";
                     } else {
                         std::cout << "No se pudo acceder a las capas Dense para guardar.\n";
@@ -294,8 +296,8 @@ int main() {
             case 6: {
                 std::cout << "Cargando modelo desde archivos de pesos...\n";
                 auto modelo = PongAgent<float>::create_sequential_with_weights(
-                    "Data/pong_model_dense1.weights",
-                    "Data/pong_model_dense2.weights"
+                    "../Data/pong_model_dense1.weights",
+                    "../Data/pong_model_dense2.weights"
                 );
                 agente = std::make_unique<PongAgent<float>>(std::move(modelo));
                 modelo_cargado = true;

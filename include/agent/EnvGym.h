@@ -11,10 +11,12 @@ namespace utec::nn {
 
 /// @brief Estado del entorno Pong.
 /// Contiene la posición de la bola (x, y) y la posición vertical de la paleta.
-struct State {
-    float ball_x, ball_y;
-    float paddle_y;
-};
+    struct State {
+        float ball_x, ball_y;
+        float paddle_y;
+        float ball_vx;      ///< Velocidad de la bola en X
+        float ball_vy;
+    };
 
 /// @brief Entorno de simulación tipo Pong.
 /// Permite probar agentes en un entorno simple de paddle controlado por IA.
@@ -36,12 +38,13 @@ public:
     /// La bola se ubica en el centro con una velocidad aleatoria.
     /// @return Estado inicial del juego
     State reset() {
-        current_state_ = {0.5f, 0.5f, 0.5f};
+        current_state_ = {0.5f, 0.5f, 0.5f, ball_vx_, ball_vy_};
 
         // Velocidad aleatoria y rápida (comentada alternativa fija)
         ball_vx_ = (0.04f + 0.06f * (rand() % 100 / 100.0f)) * (rand() % 2 ? 1 : -1);
         ball_vy_ = (0.02f + 0.04f * (rand() % 100 / 100.0f)) * (rand() % 2 ? 1 : -1);
-
+        current_state_.ball_vx = ball_vx_;
+        current_state_.ball_vy = ball_vy_;
         return current_state_;
     }
 
@@ -58,7 +61,7 @@ public:
         if (action != 0) reward -= 0.01f;
 
         // Movimiento de la paleta (corrigiendo la dirección)
-        current_state_.paddle_y += action * PADDLE_SPEED;
+        current_state_.paddle_y += (-action) * PADDLE_SPEED;
 
         // Limitar la paleta a los bordes del entorno
         current_state_.paddle_y = std::clamp(
