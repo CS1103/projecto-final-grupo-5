@@ -277,7 +277,6 @@ O también ejecutando directamente el binario de pruebas si existe:
 
 ### 3. Ejecución
 
-3. Ejecución
 **Demo:** Video alojado en docs/demo.mp4.
 
 Descripción general
