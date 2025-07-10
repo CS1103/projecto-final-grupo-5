@@ -277,12 +277,19 @@ O también ejecutando directamente el binario de pruebas si existe:
 
 ### 3. Ejecución
 
-> **Demo de ejemplo**: Video/demo alojado en `docs/demo.mp4`.
-> Pasos:
->
-> 1. Preparar datos de entrenamiento (formato CSV).
-> 2. Ejecutar comando de entrenamiento.
-> 3. Evaluar resultados con script de validación.
+3. Ejecución
+**Demo:** Video alojado en docs/demo.mp4.
+
+Descripción general
+En el video se muestra la ejecución del proyecto, donde se:
+
+1.- Preparan los datos de entrada, en formato CSV, necesarios para entrenar la red neuronal.
+
+2.- Compila el programa correctamente usando CMake y Make.
+
+3.- Ejecuta el entrenamiento de la red neuronal, mostrando en consola el progreso del entrenamiento y los resultados finales.
+
+4.- Genera las predicciones que son almacenadas en un archivo de salida, demostrando el correcto funcionamiento del modelo implementado.
 
 [Uploading video.zip…]()
 
