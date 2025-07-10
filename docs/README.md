@@ -361,14 +361,22 @@ Durante la simulación de 30 pasos usando el modelo denso 3x3 con pesos definido
 
 ### 7. Bibliografía
 
-* McCulloch, W. S., & Pitts, W. (1943). A logical calculus of the ideas immanent in nervous activity.
-* Rosenblatt, F. (1958). The perceptron: a probabilistic model for information storage.
-* Rumelhart, D. E., Hinton, G. E., & Williams, R. J. (1986). Learning representations by back-propagating errors.
-* LeCun, Y., Bengio, Y., & Hinton, G. (2015). Deep learning. Nature, 521(7553), 436-444.
-* Goodfellow, I., Bengio, Y., & Courville, A. (2016). Deep Learning. MIT Press.
-* Hochreiter, S., & Schmidhuber, J. (1997). Long short-term memory.
-* Vaswani, A., et al. (2017). Attention is all you need.
-* Kingma, D. P., & Ba, J. (2014). Adam: A method for stochastic optimization.
+[1] W. S. McCulloch and W. Pitts, “A logical calculus of the ideas immanent in nervous activity,” *The Bulletin of Mathematical Biophysics*, vol. 5, no. 4, pp. 115–133, 1943.
+
+[2] F. Rosenblatt, “The perceptron: A probabilistic model for information storage and organization in the brain,” *Psychological Review*, vol. 65, no. 6, pp. 386–408, 1958.
+
+[3] D. E. Rumelhart, G. E. Hinton, and R. J. Williams, “Learning representations by back-propagating errors,” *Nature*, vol. 323, no. 6088, pp. 533–536, 1986.
+
+[4] Y. LeCun, Y. Bengio, and G. Hinton, “Deep learning,” *Nature*, vol. 521, no. 7553, pp. 436–444, 2015.
+
+[5] I. Goodfellow, Y. Bengio, and A. Courville, *Deep Learning*, MIT Press, 2016.
+
+[6] S. Hochreiter and J. Schmidhuber, “Long short-term memory,” *Neural Computation*, vol. 9, no. 8, pp. 1735–1780, 1997.
+
+[7] A. Vaswani *et al*., “Attention is all you need,” in *Proc. Advances in Neural Information Processing Systems (NeurIPS)*, 2017, pp. 5998–6008.
+
+[8] D. P. Kingma and J. Ba, “Adam: A method for stochastic optimization,” in *Proc. 3rd Int. Conf. Learning Representations (ICLR)*, 2015.
+
 
 
 
