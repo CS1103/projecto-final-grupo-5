@@ -284,6 +284,8 @@ O también ejecutando directamente el binario de pruebas si existe:
 > 2. Ejecutar comando de entrenamiento.
 > 3. Evaluar resultados con script de validación.
 
+[Uploading video.zip…]()
+
 ---
 
 ### 4. Análisis del rendimiento
